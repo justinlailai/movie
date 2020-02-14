@@ -13,7 +13,7 @@ export const useHomeFetch =()=>{
         setLoading(false);
         try{
             const result = await(await fetch(endpoint)).json();
-            console.log(result);
+            // console.log(result);
              setState(prev=>({
                  ...prev,
                  movies:[...result.results],

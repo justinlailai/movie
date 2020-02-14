@@ -1,6 +1,12 @@
 import React from 'react';
 
-const LordMoreBtn = () => <div>LordMoreBtn</div>
+import {StyledLoadMoreBtn} from '../styles/StyledLoadMoreBtn';
+
+const LordMoreBtn = ({text, callback}) => (
+    <StyledLoadMoreBtn type="button" click={callback}>
+        {text}
+    </StyledLoadMoreBtn>
+)
 
 export default LordMoreBtn;
 
