@@ -3,7 +3,7 @@ import React from 'react';
 import {StyledLoadMoreBtn} from '../styles/StyledLoadMoreBtn';
 
 const LordMoreBtn = ({text, callback}) => (
-    <StyledLoadMoreBtn type="button" click={callback}>
+    <StyledLoadMoreBtn type="button" onClick={callback}>
         {text}
     </StyledLoadMoreBtn>
 )

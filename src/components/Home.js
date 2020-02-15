@@ -1,10 +1,10 @@
 import React, {useState } from 'react';
 import { 
-    API_URL, 
-    API_KEY, 
     IMAGE_BASE_URL, 
     BACKDROP_SIZE, 
-    POSTER_SIZE 
+    POSTER_SIZE,
+    SEARCH_BASE_URL,
+    POPULAR_BASE_URL
 } from '../config';
 
 
@@ -28,14 +28,26 @@ const Home = ()=>{
     }, fetchMovies] = useHomeFetch();
     const  [searchTerm, setsearchTerm] = useState('');
 
-    // console.log(state);
+    const searchMovies = search =>{
+        const endpoint = search?SEARCH_BASE_URL+search: POPULAR_BASE_URL;
+        setsearchTerm(search);
+
+        fetchMovies(endpoint);
+    }
+
     const LoadMoreMovies = ()=>{
+        const searchEndpoint = `${SEARCH_BASE_URL}${searchTerm}&page=${currentPage+1}`;
+        const popularEnd = `${POPULAR_BASE_URL}&page=${currentPage+1}`
+
+        const endpoint = searchTerm ? searchEndpoint : popularEnd;
+
+        fetchMovies(endpoint);
 
     }
 
     if(error) return <div>Somthing went wrong!!!!</div>
     if(!movies[0]) return <Spinner/>
-
+    console.log(totalPages)
     return (
         <React.Fragment>
             <HeroImage
@@ -60,7 +72,9 @@ const Home = ()=>{
                 }
             </Grid>
             {loading && <Spinner/>}
+            {currentPage < totalPages && !loading && (
             <LoadMoreBtn text="Load More" callback={LoadMoreMovies}/>
+            )}
         </React.Fragment>
     )
 };

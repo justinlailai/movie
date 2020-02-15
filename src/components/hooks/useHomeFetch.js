@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import {API_URL, API_KEY} from  '../../config';
+import {POPULAR_BASE_URL} from  '../../config';
 
 export const useHomeFetch =()=>{
     const [state, setState] = useState({movies:[]});
@@ -10,16 +10,27 @@ export const useHomeFetch =()=>{
 
     const fetchMovies = async endpoint => {
         setError(false);
-        setLoading(false);
+        setLoading(true);
+
+        const isLoadMore = endpoint.search('page');
+        // 節點(字串)裡面是否有page，沒有的話回傳-1
+
         try{
             const result = await(await fetch(endpoint)).json();
-            // console.log(result);
+            console.log(result);
              setState(prev=>({
                  ...prev,
-                 movies:[...result.results],
-                 heroImage:prev.heroImage || result.results[0],
-                 currentPages:result.total_pages
+                 movies:isLoadMore !== -1
+                //  有page的話用加載模式
+                 ?[...prev.movies, ...result.results]
+                //  沒有page的話，刪除所有movies重新放入result
+                 :[...result.results],
+                 heroImage:prev.heroImage || result.results[4],
+                 currentPage:result.page,
+                 totalPages:result.total_pages
              }));
+            //  console.log(state);
+
         }catch (error){
             setError(true);
             console.log(error);
@@ -28,7 +39,7 @@ export const useHomeFetch =()=>{
     }
 
     useEffect(()=>{
-        fetchMovies(`${API_URL}movie/popular?api_key=${API_KEY}`);
+        fetchMovies(POPULAR_BASE_URL);
     },[])
 
     return [{state,loading,error}, fetchMovies];
