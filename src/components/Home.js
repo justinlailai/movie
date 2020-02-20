@@ -40,7 +40,6 @@ const Home = ()=>{
         const popularEnd = `${POPULAR_BASE_URL}&page=${currentPage+1}`
 
         const endpoint = searchTerm ? searchEndpoint : popularEnd;
-
         fetchMovies(endpoint);
 
     }
@@ -50,12 +49,14 @@ const Home = ()=>{
     console.log(totalPages)
     return (
         <React.Fragment>
-            <HeroImage
+            {!searchTerm && (
+                <HeroImage
                 image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${heroImage.backdrop_path}`}
                 title ={heroImage.original_title}
                 text={heroImage.overview}
             />
-            <SearchBar/>
+            ) }
+            <SearchBar callback={searchMovies}/>
             <Grid header={searchTerm ? 'Search Result':'Popular Movies'}>
                 {movies.map(movie=>(
                  <MovieThumb
